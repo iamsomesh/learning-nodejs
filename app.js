@@ -1,6 +1,9 @@
 const http = require("http");
+const fs = require('fs');
 
 const server = http.createServer((req, res) => {
+  const url = req.url;
+  const method = req.method;
   if (req.url === '/'){
     res.write('<html>');
     res.write('<head><title>input form</title></head>');
@@ -8,6 +11,14 @@ const server = http.createServer((req, res) => {
     res.write('</html>');
     return res.end();
   }
+  //redirecting request
+  if (url === '/message' && method === 'POST'){
+    fs.writeFileSync('message.txt', 'Dumy data'); //handling file using core module 'fs'
+    res.statusCode = 302;
+    res.setHeader('Location', '/'); //redirecting
+    return res.end();
+  }
+
   res.setHeader('Content-Type', 'text/html');
   res.write('<html>');
   res.write('<head><title>my first page</title></head>');
@@ -16,4 +27,4 @@ const server = http.createServer((req, res) => {
   res.end();
 });
 
-server.listen(3000)
+server.listen(3009)
